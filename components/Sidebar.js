@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
 
 export default function Sidebar({
   visible,
@@ -14,28 +14,30 @@ export default function Sidebar({
     <Pressable
       onPress={onClose}
       style={{
-        position: "absolute",
+        position: 'absolute',
         top: 56,
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.2)",
+        backgroundColor: 'rgba(0,0,0,0.2)',
       }}
     >
       {/* stop closing when clicking inside panel */}
       <Pressable
-        onPress={() => {}}
+        onPress={() => {
+          console.log('Clicked inside sidebar, not closing');
+        }}
         style={{
           width: 220,
-          height: "100%",
-          backgroundColor: "white",
+          height: '100%',
+          backgroundColor: 'white',
           borderRightWidth: 1,
-          borderRightColor: "#ddd",
+          borderRightColor: '#ddd',
           padding: 12,
           gap: 10,
         }}
       >
-        <Text style={{ fontWeight: "700", fontSize: 16 }}>Menu</Text>
+        <Text style={{ fontWeight: '700', fontSize: 16 }}>Menu</Text>
 
         <Pressable onPress={onHome} style={{ paddingVertical: 10 }}>
           <Text>🏠 Home</Text>

@@ -5,26 +5,24 @@ import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import UserMenu from '../components/UserMenu';
 import UsersModal from '../components/UsersModal';
+import MainLayout from '../components/layouts/AppLayout';
 
 export default function HomeScreen({ navigation, route }) {
   const username = route?.params?.username || 'Guest';
-
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [usersModalOpen, setUsersModalOpen] = useState(false);
-
-  const openUsersManagement = () => {
-    setSidebarOpen(false);
-    setUsersModalOpen(true);
-  };
-
-  const logout = () => {
-    setUserMenuOpen(false);
-    navigation.replace('Login');
-  };
+  console.log('HomeScreen render with username:', { username }, { route });
 
   return (
-    <View style={{ flex: 1 }}>
+    <MainLayout title="Home" navigation={navigation} username={username}>
+      <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
+        Welcome, {username}!
+      </Text>
+      <Text>This is the Home screen layout...</Text>
+    </MainLayout>
+  );
+}
+
+/*
+   <View style={{ flex: 1 }}>
       <Header
         title="Home"
         onPressMenu={() => setSidebarOpen(true)}
@@ -69,5 +67,5 @@ export default function HomeScreen({ navigation, route }) {
         onClose={() => setUsersModalOpen(false)}
       />
     </View>
-  );
-}
+
+*/
