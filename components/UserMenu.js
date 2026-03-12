@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
 
 export default function UserMenu({ visible, onClose, onProfile, onLogout }) {
   if (!visible) return null;
@@ -8,7 +8,7 @@ export default function UserMenu({ visible, onClose, onProfile, onLogout }) {
     <Pressable
       onPress={onClose}
       style={{
-        position: "absolute",
+        position: 'absolute',
         top: 56,
         left: 0,
         right: 0,
@@ -17,25 +17,25 @@ export default function UserMenu({ visible, onClose, onProfile, onLogout }) {
     >
       <View
         style={{
-          position: "absolute",
+          position: 'absolute',
           top: 8,
           right: 12,
           width: 160,
           borderWidth: 1,
-          borderColor: "#ddd",
+          borderColor: '#ddd',
           borderRadius: 10,
-          backgroundColor: "white",
-          overflow: "hidden",
+          backgroundColor: 'white',
+          overflow: 'hidden',
         }}
       >
         <Pressable onPress={onProfile} style={{ padding: 12 }}>
           <Text>Profile</Text>
         </Pressable>
 
-        <View style={{ height: 1, backgroundColor: "#eee" }} />
+        <View style={{ height: 1, backgroundColor: '#eee' }} />
 
         <Pressable onPress={onLogout} style={{ padding: 12 }}>
-          <Text style={{ color: "#c00" }}>Logout</Text>
+          <Text style={{ color: '#c00' }}>Logout</Text>
         </Pressable>
       </View>
     </Pressable>

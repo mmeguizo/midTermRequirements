@@ -1,30 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Alert } from 'react-native';
 import AppButton from '../components/AppButton';
 import LoginLayout from '../components/layouts/LoginLayout';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function LoginScreen({ navigation }) {
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
 
+  const { signIn } = useContext(AuthContext);
   const handleLogin = () => {
     if (!user.trim() || !pass.trim()) {
       Alert.alert('Oops', 'Please fill in all fields');
       return;
     }
 
-    if (user === 'admin' && pass === '1234') {
-      navigation.replace('Home', { username: user });
-    } else {
-      Alert.alert('Invalid', 'Wrong username/password');
-    }
+    // if (user === 'admin' && pass === '1234') {
+    //   navigation.replace('Home', { username: user });
+    // } else {
+    //   Alert.alert('Invalid', 'Wrong username/password');
+    // }
+
+    signInWithEmailAndPassword(auth, user, pass)
+      .then(({ user: firebaseUser }) => {
+        // firebaseUser.uid, .email, etc. are available
+        console.log('Firebase auth success:', { firebaseUser });
+        signIn(firebaseUser.email); // update context with the email of the logged-in user
+        navigation.replace('Home');
+      })
+      .catch((err) => {
+        console.log('Firebase auth error:', err.message);
+        Alert.alert('Authentication failed', err.message);
+        window.alert('Authentication failed', err.message);
+      });
   };
 
   return (
     <LoginLayout>
       <TextInput
-        placeholder="Username"
+        placeholder="Email"
         value={user}
+        keyboardType="email-address"
         onChangeText={setUser}
         style={{ borderWidth: 1, borderRadius: 8, padding: 10 }}
       />
@@ -38,7 +56,7 @@ export default function LoginScreen({ navigation }) {
       />
 
       <AppButton title="Sign in" onPress={handleLogin} />
-      <Text style={{ opacity: 0.6 }}>Try: admin / 1234</Text>
+      <Text style={{ opacity: 0.6 }}>Try: test / test</Text>
     </LoginLayout>
   );
 }
