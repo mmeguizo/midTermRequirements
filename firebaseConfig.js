@@ -27,6 +27,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
+if (!app.options || !app.options.apiKey) {
+  // this should never happen unless your object is empty/undefined
+  console.error('Firebase init failed – config is wrong', app.options);
+} else {
+  console.log('Firebase initialized with project:', app.options.projectId);
+}
+
 /*
 
 // Import the functions you need from the SDKs you need
