@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
-
+import { AuthProvider } from './contexts/AuthContext';
 import AppNavigator from './navigation/AppNavigator';
 
 export default function App() {
@@ -11,7 +11,9 @@ export default function App() {
       {/* hides status bar completely */}
       <StatusBar hidden />
       <NavigationContainer>
-        <AppNavigator />
+        <AuthProvider>
+          <AppNavigator />
+        </AuthProvider>
       </NavigationContainer>
     </View>
   );

@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Alert } from 'react-native';
 import AppButton from '../components/AppButton';
 import LoginLayout from '../components/layouts/LoginLayout';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function LoginScreen({ navigation }) {
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
 
+  const { signIn } = useContext(AuthContext);
   const handleLogin = () => {
     if (!user.trim() || !pass.trim()) {
       Alert.alert('Oops', 'Please fill in all fields');
@@ -25,7 +27,8 @@ export default function LoginScreen({ navigation }) {
       .then(({ user: firebaseUser }) => {
         // firebaseUser.uid, .email, etc. are available
         console.log('Firebase auth success:', { firebaseUser });
-        navigation.replace('Home', { username: firebaseUser.email });
+        signIn(firebaseUser.email); // update context with the email of the logged-in user
+        navigation.replace('Home');
       })
       .catch((err) => {
         console.log('Firebase auth error:', err.message);

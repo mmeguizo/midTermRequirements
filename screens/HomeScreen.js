@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text } from 'react-native';
 
 import Header from '../components/Header';
@@ -6,15 +6,16 @@ import Sidebar from '../components/Sidebar';
 import UserMenu from '../components/UserMenu';
 import UsersModal from '../components/UsersModal';
 import MainLayout from '../components/layouts/AppLayout';
-
+import { AuthContext } from '../contexts/AuthContext';
 export default function HomeScreen({ navigation, route }) {
-  const username = route?.params?.username || 'Guest';
-  console.log('HomeScreen render with username:', { username }, { route });
+  // const username = route?.params?.username || 'Guest';
+  const { user } = useContext(AuthContext);
+  console.log('HomeScreen render with user:', user);
 
   return (
-    <MainLayout title="Home" navigation={navigation} username={username}>
+    <MainLayout title="Home" navigation={navigation} username={user?.email}>
       <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
-        Welcome, {username}!
+        Welcome, {user?.email}!
       </Text>
       <Text>This is the Home screen layout...</Text>
     </MainLayout>
