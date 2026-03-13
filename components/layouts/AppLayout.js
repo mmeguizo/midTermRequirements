@@ -4,11 +4,9 @@ import Header from '../Header';
 import Sidebar from '../Sidebar';
 import UserMenu from '../UserMenu';
 import UsersModal from '../UsersModal';
+import UsersScreen from '../../screens/UsersScreen';
 
-// import Header from '../components/Header';
-// import Sidebar from '../components/Sidebar';
-// import UserMenu from '../components/UserMenu';
-// import UsersModal from '../components/UsersModal';
+
 
 export default function MainLayout({
   title,
@@ -25,10 +23,16 @@ export default function MainLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [usersModalOpen, setUsersModalOpen] = useState(false);
+  const [usersScreenOpen, setUsersScreenOpen] = useState(false);
+
+  const openUsersManagementModal = () => {
+    setSidebarOpen(false);
+    setUsersModalOpen(true);
+  };
 
   const openUsersManagement = () => {
     setSidebarOpen(false);
-    setUsersModalOpen(true);
+    setUsersScreenOpen(true);
   };
 
   const logout = () => {
@@ -64,12 +68,18 @@ export default function MainLayout({
           setSidebarOpen(false);
           navigation.navigate('Profile', { username: name });
         }}
-        onUsersManagement={openUsersManagement}
+        onUsersManagement={() => {
+          setSidebarOpen(false);
+          navigation.navigate('Users', { username: name });
+        }}
+        onUsersManagementModal={openUsersManagementModal}
       />
       <UsersModal
         visible={usersModalOpen}
         onClose={() => setUsersModalOpen(false)}
       />
+     
+    
     </View>
   );
 }

@@ -1,10 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, Text } from 'react-native';
 
-import Header from '../components/Header';
-import Sidebar from '../components/Sidebar';
-import UserMenu from '../components/UserMenu';
-import UsersModal from '../components/UsersModal';
+
 import MainLayout from '../components/layouts/AppLayout';
 import { AuthContext } from '../contexts/AuthContext';
 export default function HomeScreen({ navigation, route }) {
@@ -21,6 +18,14 @@ export default function HomeScreen({ navigation, route }) {
     </MainLayout>
   );
 }
+
+
+
+
+
+
+
+
 
 /*
    <View style={{ flex: 1 }}>

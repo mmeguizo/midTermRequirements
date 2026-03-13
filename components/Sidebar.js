@@ -6,6 +6,7 @@ export default function Sidebar({
   onClose,
   onHome,
   onProfile,
+  onUsersManagementModal,
   onUsersManagement,
 }) {
   if (!visible) return null;
@@ -47,9 +48,15 @@ export default function Sidebar({
           <Text>👤 Profile Screen</Text>
         </Pressable>
 
-        <Pressable onPress={onUsersManagement} style={{ paddingVertical: 10 }}>
+        <Pressable onPress={onUsersManagementModal} style={{ paddingVertical: 10 }}>
           <Text>🧑‍💼 Users Management (Modal)</Text>
         </Pressable>
+
+        <Pressable onPress={onUsersManagement} style={{ paddingVertical: 10 }}>
+          <Text>🧑‍💼 Users Crud (Screen)</Text>
+        </Pressable>
+
+
       </Pressable>
     </Pressable>
   );
