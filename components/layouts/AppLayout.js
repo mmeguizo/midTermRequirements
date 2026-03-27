@@ -13,12 +13,12 @@ export default function MainLayout({
   navigation,
   children,
   route,
-  username,
+  name,
 }) {
   // accept either a username prop or, if running as a wrapped screen, the route argument
-  const name = username ?? route?.params?.username ?? 'Guest';
+  const names = name ?? route?.params?.name ?? 'Guest';
 
-  console.log('MainLayout render with username:', { name }, { route });
+  console.log('MainLayout render with name:', { names }, { route });
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -51,7 +51,7 @@ export default function MainLayout({
       <UserMenu
         onProfile={() => {
           setUserMenuOpen(false);
-          navigation.navigate('Profile', { username: name });
+          navigation.navigate('Profile', { name: name });
         }}
         onLogout={logout}
         visible={userMenuOpen}
@@ -62,15 +62,15 @@ export default function MainLayout({
         onClose={() => setSidebarOpen(false)}
         onHome={() => {
           setSidebarOpen(false);
-          navigation.navigate('Home', { username: name });
+          navigation.navigate('Home', { name: name });
         }}
         onProfile={() => {
           setSidebarOpen(false);
-          navigation.navigate('Profile', { username: name });
+          navigation.navigate('Profile', { name: name });
         }}
         onUsersManagement={() => {
           setSidebarOpen(false);
-          navigation.navigate('Users', { username: name });
+          navigation.navigate('Users', { name: name });
         }}
         onUsersManagementModal={openUsersManagementModal}
       />

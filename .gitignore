@@ -1,2 +1,4 @@
-# Dependencies
+# .gitignore
 node_modules/
+.expo/
+.env

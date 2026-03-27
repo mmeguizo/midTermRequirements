@@ -1,17 +1,97 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, Alert } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { View, Text, TextInput, Alert, Platform } from 'react-native';
 import AppButton from '../components/AppButton';
 import LoginLayout from '../components/layouts/LoginLayout';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithCredential, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 import { AuthContext } from '../contexts/AuthContext';
+
+GoogleSignin.configure({
+  // You MUST provide your Web Client ID here, even if you are building for iOS/Android
+  // This is what Firebase uses to generate the credential.
+  // webClientId: '77629757222-q1sr4r45efiqt4ate8s5s0eqev8ptpvh.apps.googleusercontent.com', 
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+});
 
 export default function LoginScreen({ navigation }) {
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
 
+
+  // --- Google Native Login ---
+  // const handleGoogleLogin = async () => {
+  //   try {
+  //     // Check if your device supports Google Play (Android specific check)
+  //     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+
+  //     // Get the user's ID token from Google natively
+  //     const { idToken } = await GoogleSignin.signIn();
+
+  //     // Create a Firebase credential with the Google token
+  //     const googleCredential = GoogleAuthProvider.credential(idToken);
+
+  //     // Sign-in the user with the credential
+  //     const { user: firebaseUser } = await signInWithCredential(auth, googleCredential);
+
+  //     console.log('Firebase auth google success:', { firebaseUser });
+  //     signIn(firebaseUser.email);
+  //     navigation.replace('Home');
+
+  //   } catch (error) {
+  //     console.log('Google sign-in error:', error);
+  //     Alert.alert('Google Authentication failed', error.message);
+  //   }
+  // };
+
+  const handleGoogleLogin = async () => {
+    // 🌐 IF WE ARE ON THE WEB (Testing in Chrome/Edge)
+    if (Platform.OS === 'web') {
+      try {
+        const provider = new GoogleAuthProvider();
+        // This triggers the standard web browser popup!
+        const result = await signInWithPopup(auth, provider);
+
+        console.log('Web Google auth success:', result.user);
+        // signIn(result.user.email);
+        signIn({
+          uid: result.user.uid,
+          email: result.user.email,
+          name: result.user.displayName,
+        });
+        navigation.replace('Home');
+      } catch (error) {
+        console.log('Web Google sign-in error:', error);
+        window.alert(`Google Auth failed: ${error.message}`);
+      }
+      return; // Stop here so it doesn't run the mobile code below
+    }
+
+    // 📱 IF WE ARE ON A PHONE (Android/iOS)
+    try {
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      const { idToken } = await GoogleSignin.signIn();
+      const googleCredential = GoogleAuthProvider.credential(idToken);
+      const { user: firebaseUser } = await signInWithCredential(auth, googleCredential);
+
+      console.log('Mobile Google auth success:', { firebaseUser });
+      // signIn(firebaseUser.email);
+      signIn({
+        uid: result.user.uid,
+        email: result.user.email,
+        name: result.user.displayName,
+      });
+      navigation.replace('Home');
+
+    } catch (error) {
+      console.log('Mobile Google sign-in error:', error);
+      Alert.alert('Google Authentication failed', error.message);
+    }
+  };
+
   const { signIn } = useContext(AuthContext);
   const handleLogin = () => {
+    
     if (!user.trim() || !pass.trim()) {
       Alert.alert('Oops', 'Please fill in all fields');
       return;
@@ -27,8 +107,13 @@ export default function LoginScreen({ navigation }) {
       .then(({ user: firebaseUser }) => {
         // firebaseUser.uid, .email, etc. are available
         console.log('Firebase auth success:', { firebaseUser });
-        signIn(firebaseUser.email); // update context with the email of the logged-in user
+        // signIn(firebaseUser.email); // update context with the email of the logged-in user
         navigation.replace('Home');
+        signIn({
+          uid: firebaseUser.uid ?? 1,
+          email: firebaseUser.email,
+          name: firebaseUser.email.split('@')[0],
+        });
       })
       .catch((err) => {
         console.log('Firebase auth error:', err.message);
@@ -56,7 +141,8 @@ export default function LoginScreen({ navigation }) {
       />
 
       <AppButton title="Sign in" onPress={handleLogin} />
-      <Text style={{ opacity: 0.6 }}>Try: test / test</Text>
+      <AppButton title="Sign with Google" onPress={handleGoogleLogin} />
+      <Text style={{ opacity: 0.6 }}>Try: testers@testers.com / testers</Text>
     </LoginLayout>
   );
 }

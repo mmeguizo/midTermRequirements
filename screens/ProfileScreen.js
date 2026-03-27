@@ -8,19 +8,19 @@ import UsersModal from '../components/UsersModal';
 import MainLayout from '../components/layouts/AppLayout';
 
 export default function ProfileScreen({ navigation, route }) {
-  const username = route?.params?.username || 'Guest';
+  const name = route?.params?.name || 'Guest';
 
   return (
-    <MainLayout title="Profile" navigation={navigation} username={username}>
+    <MainLayout title="Profile" navigation={navigation} name={name}>
       <View style={{ padding: 16, gap: 10 }}>
         <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
-          Profile of {username}
+          Profile of {name}
         </Text>
         <Text>This screen follows the same layout style as Home.</Text>
 
         <View style={{ borderWidth: 1, borderRadius: 10, padding: 12 }}>
           <Text style={{ fontWeight: '600' }}>Profile Details</Text>
-          <Text style={{ opacity: 0.8 }}>Email: {username}@sample.com</Text>
+          <Text style={{ opacity: 0.8 }}>Email: {name}@sample.com</Text>
           <Text style={{ opacity: 0.8 }}>Role: Student (placeholder)</Text>
         </View>
       </View>
@@ -37,13 +37,13 @@ export default function ProfileScreen({ navigation, route }) {
       />
       <View style={{ padding: 16, gap: 10 }}>
         <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
-          Profile of {username}
+          Profile of {name}
         </Text>
         <Text>This screen follows the same layout style as Home.</Text>
 
         <View style={{ borderWidth: 1, borderRadius: 10, padding: 12 }}>
           <Text style={{ fontWeight: '600' }}>Profile Details</Text>
-          <Text style={{ opacity: 0.8 }}>Email: {username}@sample.com</Text>
+          <Text style={{ opacity: 0.8 }}>Email: {name}@sample.com</Text>
           <Text style={{ opacity: 0.8 }}>Role: Student (placeholder)</Text>
         </View>
       </View>
@@ -59,7 +59,7 @@ export default function ProfileScreen({ navigation, route }) {
         onClose={() => setSidebarOpen(false)}
         onHome={() => {
           setSidebarOpen(false);
-          navigation.navigate('Home', { username });
+          navigation.navigate('Home', { name });
         }}
         onProfile={() => setSidebarOpen(false)}
         onUsersManagement={openUsersManagement}

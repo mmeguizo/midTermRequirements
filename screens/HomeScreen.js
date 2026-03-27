@@ -7,12 +7,12 @@ import { AuthContext } from '../contexts/AuthContext';
 export default function HomeScreen({ navigation, route }) {
   // const username = route?.params?.username || 'Guest';
   const { user } = useContext(AuthContext);
-  console.log('HomeScreen render with user:', user);
+
 
   return (
-    <MainLayout title="Home" navigation={navigation} username={user?.email}>
+    <MainLayout title="Home" navigation={navigation} name={user?.name}>
       <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
-        Welcome, {user?.email}!
+        Welcome, {user?.name}!
       </Text>
       <Text>This is the Home screen layout...</Text>
     </MainLayout>
