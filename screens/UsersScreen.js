@@ -1,11 +1,10 @@
 import React, { useState, useContext } from 'react';
 import MainLayout from '../components/layouts/AppLayout';
 import { AuthContext } from '../contexts/AuthContext';
-import { DataTable } from 'react-native-paper';
+import { DataTable, ActivityIndicator, MD2Colors, Button, IconButton } from 'react-native-paper';
 import { View, Text, Alert } from 'react-native';
 import { db } from '../firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
-import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 export default function UsersScreen({ navigation }) {
 
     const { user } = useContext(AuthContext);
@@ -20,6 +19,28 @@ export default function UsersScreen({ navigation }) {
     //loading animation
     const [loading, setLoading] = useState(true);
 
+    const handleAddUser = () => {
+        Alert.alert('Add user', 'Add user action triggered.');
+    };
+
+    const handleEditUser = (user) => {
+        Alert.alert('Edit user', `Edit ${user.email}`);
+    };
+
+    const handleDeleteUser = (user) => {
+        Alert.alert(
+            'Delete user',
+            `Delete ${user.email}?`,
+            [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: () => setUsers((prev) => prev.filter((u) => u.id !== user.id)),
+                },
+            ]
+        );
+    };
 
     const from = page * itemsPerPage;
     const to = Math.min((page + 1) * itemsPerPage, users.length);
@@ -48,9 +69,15 @@ export default function UsersScreen({ navigation }) {
         <MainLayout title="Home" navigation={navigation} name={user?.name}>
 
             <View style={{ padding: 16, gap: 10 }}>
-                <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
-                    Users Management (Screen)
-                </Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+                    <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
+                        Users Management (Screen)
+                    </Text>
+                    <Button icon="plus" mode="contained" onPress={handleAddUser}>
+                        Add user
+                    </Button>
+                </View>
+
                 {loading ?
                     (
                         <DataTable>
@@ -58,6 +85,7 @@ export default function UsersScreen({ navigation }) {
                                 <DataTable.Title numeric>Email</DataTable.Title>
                                 <DataTable.Title numeric>First Name</DataTable.Title>
                                 <DataTable.Title numeric>Last Name</DataTable.Title>
+                                <DataTable.Title numeric>Actions</DataTable.Title>
                             </DataTable.Header>
                             <DataTable.Row style={{ justifyContent: 'center' }}>
                                 <DataTable.Cell style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -74,11 +102,15 @@ export default function UsersScreen({ navigation }) {
                                 <DataTable.Title numeric>Email</DataTable.Title>
                                 <DataTable.Title numeric>First Name</DataTable.Title>
                                 <DataTable.Title numeric>Last Name</DataTable.Title>
+                                <DataTable.Title numeric>Actions</DataTable.Title>
                             </DataTable.Header>
-                            <DataTable.Row >
-                                <Text>
-                                    No users yet
-                                </Text>
+                            <DataTable.Row>
+                                <DataTable.Cell numeric style={{ flex: 3 }}>
+                                    <Text>No users yet</Text>
+                                </DataTable.Cell>
+                                <DataTable.Cell numeric />
+                                <DataTable.Cell numeric />
+                                <DataTable.Cell numeric />
                             </DataTable.Row>
                         </DataTable>) :
 
@@ -87,13 +119,18 @@ export default function UsersScreen({ navigation }) {
                                 <DataTable.Title numeric>Email</DataTable.Title>
                                 <DataTable.Title numeric>First Name</DataTable.Title>
                                 <DataTable.Title numeric>Last Name</DataTable.Title>
+                                <DataTable.Title numeric>Actions</DataTable.Title>
                             </DataTable.Header>
 
                             {users.slice(from, to).map((user) => (
-                                <DataTable.Row key={user.email}>
+                                <DataTable.Row key={user.id}>
                                     <DataTable.Cell numeric>{user.email}</DataTable.Cell>
                                     <DataTable.Cell numeric>{user.firstname}</DataTable.Cell>
                                     <DataTable.Cell numeric>{user.lastname}</DataTable.Cell>
+                                    <DataTable.Cell numeric style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                        <IconButton icon="pencil" size={20} onPress={() => handleEditUser(user)} />
+                                        <IconButton icon="delete" size={20} onPress={() => handleDeleteUser(user)} />
+                                    </DataTable.Cell>
                                 </DataTable.Row>
                             ))}
 
