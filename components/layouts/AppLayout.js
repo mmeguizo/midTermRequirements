@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { View } from 'react-native';
 import Header from '../Header';
 import Sidebar from '../Sidebar';
 import UserMenu from '../UserMenu';
 import UsersModal from '../UsersModal';
-import UsersScreen from '../../screens/UsersScreen';
-
+import UsersScreen from '../../screens/UsersScreen'; 
+import {AuthContext} from '../../contexts/AuthContext'
 
 
 export default function MainLayout({
@@ -17,7 +17,7 @@ export default function MainLayout({
 }) {
   // accept either a username prop or, if running as a wrapped screen, the route argument
   const names = name ?? route?.params?.name ?? 'Guest';
-
+  const { user, verifyUserSession } = useContext(AuthContext);
   console.log('MainLayout render with name:', { names }, { route });
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -40,11 +40,28 @@ export default function MainLayout({
     navigation.replace('Login');
   };
 
+    useEffect(() => {
+    const ensureAuthenticated = async () => {
+      // If the state lost the user (e.g. refreshed the page on web)
+      if (!user || !user.name) {
+        // Force a check against Local Storage
+        const recoveredUser = await verifyUserSession();
+        
+        // If local storage is also wiped, kick them out!
+        if (!recoveredUser) {
+          navigation.replace('Login');
+        }
+      }
+    };
+    ensureAuthenticated();
+  }, [user, verifyUserSession, navigation]); // Re-run this check if the 'user' state changes
+
   return (
     <View style={{ flex: 1 }}>
       <Header
+        isMenuOpen={sidebarOpen}
         title={title}
-        onPressMenu={() => setSidebarOpen(true)}
+        onPressMenu={() => setSidebarOpen(!sidebarOpen)}
         onPressUser={() => setUserMenuOpen((v) => !v)}
       />
       <View style={{ flex: 1, padding: 16 }}>{children}</View>
@@ -78,8 +95,8 @@ export default function MainLayout({
         visible={usersModalOpen}
         onClose={() => setUsersModalOpen(false)}
       />
-     
-    
+
+
     </View>
   );
 }

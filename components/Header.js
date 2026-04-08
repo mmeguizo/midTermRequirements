@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
-
-export default function Header({ title, onPressMenu, onPressUser }) {
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+export default function Header({ title, onPressMenu, onPressUser , isMenuOpen }) {
   return (
     <View
       style={{
@@ -14,7 +14,7 @@ export default function Header({ title, onPressMenu, onPressUser }) {
     >
       {/* left menu */}
       <Pressable onPress={onPressMenu} style={{ padding: 8 }}>
-        <Text style={{ fontSize: 20, color: 'white' }}>☰</Text>
+       <MaterialIcons name={isMenuOpen ? "menu-open" : "menu"} size={24} color="black" />
       </Pressable>
 
       {/* title */}

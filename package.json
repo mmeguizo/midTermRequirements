@@ -4,7 +4,7 @@
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start -c",
     "starter": "node --max-old-space-size=4096 expo start",
     "start:reset": "expo start -c",
     "android": "expo start --android",
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
+    "@expo/vector-icons": "^15.1.1",
     "@react-native-async-storage/async-storage": "~1.23.1",
     "@react-native-google-signin/google-signin": "^16.1.2",
     "@react-navigation/native": "^7.1.31",

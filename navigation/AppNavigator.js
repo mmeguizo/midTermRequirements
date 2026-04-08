@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
   const user = useContext(AuthContext)
-  
+  console.log(user)
   return (
     <Stack.Navigator
       initialRouteName={user ? 'Home' : 'Login'}
