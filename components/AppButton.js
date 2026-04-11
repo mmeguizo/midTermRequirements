@@ -1,19 +1,10 @@
 import React from 'react';
-import { Pressable, Text } from 'react-native';
+import { Button } from 'react-native-paper';
 
-export default function AppButton({ title, onPress }) {
+export default function AppButton({ title, onPress, icon, mode = 'contained' }) {
   return (
-    <Pressable
-      onPress={onPress}
-      style={{
-        padding: 12,
-        backgroundColor: '#222',
-        borderRadius: 8,
-      }}
-    >
-      <Text style={{ color: 'white', textAlign: 'center', fontWeight: '600' }}>
-        {title}
-      </Text>
-    </Pressable>
+    <Button mode={mode} onPress={onPress} icon={icon}>
+      {title}
+    </Button>
   );
 }

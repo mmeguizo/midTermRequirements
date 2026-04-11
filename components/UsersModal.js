@@ -1,89 +1,82 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, View, Text, Pressable, FlatList } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { Modal, Portal, Text, Button, Divider, ActivityIndicator } from 'react-native-paper';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
 export default function UsersModal({ visible, onClose }) {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!visible) return; // only load when shown
-    console.log('UsersModal db...', db);
+    if (!visible) return;
     const loadUsers = async () => {
+      setLoading(true);
       try {
         const q = collection(db, 'users_basic');
-        console.log('Query:', q);
-
         const snap = await getDocs(q);
         const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
         setUsers(list);
       } catch (e) {
         console.error('failed to load users', e);
+      } finally {
+        setLoading(false);
       }
     };
-
     loadUsers();
   }, [visible]);
 
   return (
-    <Modal visible={visible} transparent animationType="fade">
-      <Pressable
-        onPress={onClose}
-        style={{
-          flex: 1,
-          backgroundColor: 'rgba(0,0,0,0.35)',
-          justifyContent: 'center',
-          padding: 16,
-        }}
+    <Portal>
+      <Modal
+        visible={visible}
+        onDismiss={onClose}
+        contentContainerStyle={styles.modal}
       >
-        <Pressable
-          onPress={() => {}}
-          style={{
-            backgroundColor: 'white',
-            borderRadius: 12,
-            padding: 16,
-            gap: 10,
-          }}
-        >
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-            Users Management
-          </Text>
+        <Text variant="titleLarge" style={{ fontWeight: 'bold', marginBottom: 8 }}>
+          Users Management
+        </Text>
+        <Divider style={{ marginBottom: 12 }} />
 
-          {/* render the list */}
+        {loading ? (
+          <ActivityIndicator style={{ marginVertical: 24 }} />
+        ) : (
           <FlatList
             data={users}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <View style={{ paddingVertical: 4 }}>
-                <Text>
-                  {item.email} – {item.username}
-                </Text>
+              <View style={styles.listRow}>
+                <Text variant="bodyMedium" style={{ fontWeight: '600' }}>{item.email}</Text>
+                <Text variant="bodySmall" style={{ opacity: 0.6 }}>{item.username}</Text>
               </View>
             )}
-            ListEmptyComponent={<Text>No users found</Text>}
+            ListEmptyComponent={
+              <Text variant="bodyMedium" style={{ opacity: 0.5, textAlign: 'center', paddingVertical: 16 }}>
+                No users found
+              </Text>
+            }
+            ItemSeparatorComponent={() => <Divider />}
           />
+        )}
 
-          <Pressable
-            onPress={onClose}
-            style={{
-              padding: 12,
-              backgroundColor: '#222',
-              borderRadius: 8,
-              marginTop: 8,
-            }}
-          >
-            <Text
-              style={{
-                color: 'white',
-                textAlign: 'center',
-                fontWeight: '600',
-              }}
-            >
-              Close
-            </Text>
-          </Pressable>
-        </Pressable>
-      </Pressable>
-    </Modal>
+        <Button mode="contained" onPress={onClose} style={{ marginTop: 12 }}>
+          Close
+        </Button>
+      </Modal>
+    </Portal>
   );
 }
+
+const styles = StyleSheet.create({
+  modal: {
+    backgroundColor: '#FFFBFE',
+    margin: 24,
+    padding: 20,
+    borderRadius: 16,
+    maxHeight: '80%',
+  },
+  listRow: {
+    paddingVertical: 10,
+    paddingHorizontal: 4,
+  },
+});

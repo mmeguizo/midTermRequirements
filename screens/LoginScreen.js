@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { View, Text, TextInput, Alert, Platform } from 'react-native';
-import AppButton from '../components/AppButton';
+import { View, Alert, Platform } from 'react-native';
+import { TextInput, Button, Text } from 'react-native-paper';
 import LoginLayout from '../components/layouts/LoginLayout';
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithCredential, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
@@ -125,24 +125,33 @@ export default function LoginScreen({ navigation }) {
   return (
     <LoginLayout>
       <TextInput
-        placeholder="Email"
+        label="Email"
         value={user}
         keyboardType="email-address"
         onChangeText={setUser}
-        style={{ borderWidth: 1, borderRadius: 8, padding: 10 }}
+        mode="outlined"
+        left={<TextInput.Icon icon="email" />}
+        autoCapitalize="none"
       />
 
       <TextInput
-        placeholder="Password"
+        label="Password"
         value={pass}
         onChangeText={setPass}
         secureTextEntry
-        style={{ borderWidth: 1, borderRadius: 8, padding: 10 }}
+        mode="outlined"
+        left={<TextInput.Icon icon="lock" />}
       />
 
-      <AppButton title="Sign in" onPress={handleLogin} />
-      <AppButton title="Sign with Google" onPress={handleGoogleLogin} />
-      <Text style={{ opacity: 0.6 }}>Try: testers@testers.com / testers</Text>
+      <Button mode="contained" onPress={handleLogin} icon="login" style={{ marginTop: 4 }}>
+        Sign in
+      </Button>
+      <Button mode="outlined" onPress={handleGoogleLogin} icon="google">
+        Sign with Google
+      </Button>
+      <Text variant="bodySmall" style={{ opacity: 0.6, textAlign: 'center' }}>
+        Try: testers@testers.com / testers
+      </Text>
     </LoginLayout>
   );
 }

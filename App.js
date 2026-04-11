@@ -9,13 +9,39 @@ import {
   MD3LightTheme,
   adaptNavigationTheme,
 } from 'react-native-paper';
+
+const appTheme = {
+  ...MD3LightTheme,
+  colors: {
+    ...MD3LightTheme.colors,
+    primary: '#6200EE',
+    onPrimary: '#FFFFFF',
+    primaryContainer: '#E8DEF8',
+    onPrimaryContainer: '#21005D',
+    secondary: '#625B71',
+    onSecondary: '#FFFFFF',
+    secondaryContainer: '#E8DEF8',
+    surface: '#FFFBFE',
+    onSurface: '#1C1B1F',
+    surfaceVariant: '#E7E0EC',
+    onSurfaceVariant: '#49454F',
+    error: '#B3261E',
+    onError: '#FFFFFF',
+    outline: '#79747E',
+    elevation: {
+      ...MD3LightTheme.colors.elevation,
+      level2: '#F3EDF7',
+    },
+  },
+};
+
 const { LightTheme } = adaptNavigationTheme({
   reactNavigationLight: DefaultTheme,
 });
 
 export default function App() {
   return (
-    <PaperProvider theme={MD3LightTheme}>
+    <PaperProvider theme={appTheme}>
     <View style={styles.container}>
       {/* hides status bar completely */}
       <StatusBar hidden />

@@ -4,7 +4,6 @@ import Header from '../Header';
 import Sidebar from '../Sidebar';
 import UserMenu from '../UserMenu';
 import UsersModal from '../UsersModal';
-import UsersScreen from '../../screens/UsersScreen'; 
 import {AuthContext} from '../../contexts/AuthContext'
 
 
@@ -64,7 +63,7 @@ export default function MainLayout({
         onPressMenu={() => setSidebarOpen(!sidebarOpen)}
         onPressUser={() => setUserMenuOpen((v) => !v)}
       />
-      <View style={{ flex: 1, padding: 16 }}>{children}</View>
+      <View style={{ flex: 1, padding: 16, backgroundColor: '#F9F5FF' }}>{children}</View>
       <UserMenu
         onProfile={() => {
           setUserMenuOpen(false);

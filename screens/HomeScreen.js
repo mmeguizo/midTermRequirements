@@ -1,77 +1,82 @@
-import React, { useState, useContext } from 'react';
-import { View, Text } from 'react-native';
-
+import React, { useContext, useState, useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Text, Card, Avatar } from 'react-native-paper';
+import { collection, getCountFromServer } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 
 import MainLayout from '../components/layouts/AppLayout';
 import { AuthContext } from '../contexts/AuthContext';
-export default function HomeScreen({ navigation, route }) {
-  // const username = route?.params?.username || 'Guest';
-  const { user } = useContext(AuthContext);
 
+export default function HomeScreen({ navigation, route }) {
+  const { user } = useContext(AuthContext);
+  const [userCount, setUserCount] = useState(null);
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const coll = collection(db, 'users_basic');
+        const snapshot = await getCountFromServer(coll);
+        setUserCount(snapshot.data().count);
+      } catch (e) {
+        console.error('Failed to fetch user count', e);
+      }
+    };
+    fetchCount();
+  }, []);
 
   return (
     <MainLayout title="Home" navigation={navigation} name={user?.name}>
-      <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
-        Welcome, {user?.name}!
-      </Text>
-      <Text>This is the Home screen layout...</Text>
+      <View style={styles.container}>
+        <Text variant="headlineSmall" style={{ fontWeight: 'bold' }}>
+          Welcome, {user?.name}!
+        </Text>
+
+        {/* Stat card — total users */}
+        <Card style={styles.statCard}>
+          <Card.Content style={styles.statContent}>
+            <Avatar.Icon size={48} icon="account-group" style={styles.statIcon} />
+            <View>
+              <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
+                {userCount === null ? '—' : userCount}
+              </Text>
+              <Text variant="bodySmall" style={{ opacity: 0.6 }}>Total Users</Text>
+            </View>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.card}>
+          <Card.Title
+            title="Dashboard"
+            subtitle="Overview"
+            left={(props) => <Avatar.Icon {...props} icon="view-dashboard" />}
+          />
+          <Card.Content>
+            <Text variant="bodyMedium" style={{ opacity: 0.7 }}>
+              You can place lists, dashboards, charts, etc. here.
+            </Text>
+          </Card.Content>
+        </Card>
+      </View>
     </MainLayout>
   );
 }
 
-
-
-
-
-
-
-
-
-/*
-   <View style={{ flex: 1 }}>
-      <Header
-        title="Home"
-        onPressMenu={() => setSidebarOpen(true)}
-        onPressUser={() => setUserMenuOpen((v) => !v)}
-      />
-      <View style={{ padding: 16, gap: 10 }}>
-        <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
-          Welcome, {username}!
-        </Text>
-        <Text>This is the Home screen layout.</Text>
-
-        <View style={{ borderWidth: 1, borderRadius: 10, padding: 12 }}>
-          <Text style={{ fontWeight: '600' }}>Card Example</Text>
-          <Text style={{ opacity: 0.8 }}>
-            You can place lists, dashboards, etc. here.
-          </Text>
-        </View>
-      </View>
-      <UserMenu
-        visible={userMenuOpen}
-        onClose={() => setUserMenuOpen(false)}
-        onProfile={() => {
-          setUserMenuOpen(false);
-          navigation.navigate('Profile', { username });
-        }}
-        onLogout={logout}
-      />
-
-      <Sidebar
-        visible={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        onHome={() => setSidebarOpen(false)}
-        onProfile={() => {
-          setSidebarOpen(false);
-          navigation.navigate('Profile', { username });
-        }}
-        onUsersManagement={openUsersManagement}
-      />
-
-      <UsersModal
-        visible={usersModalOpen}
-        onClose={() => setUsersModalOpen(false)}
-      />
-    </View>
-
-*/
+const styles = StyleSheet.create({
+  container: {
+    gap: 16,
+  },
+  statCard: {
+    borderRadius: 16,
+  },
+  statContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  statIcon: {
+    backgroundColor: '#E8DEF8',
+  },
+  card: {
+    borderRadius: 16,
+  },
+});
