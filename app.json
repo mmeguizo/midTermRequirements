@@ -1,11 +1,19 @@
 {
   "expo": {
-    "plugins": ["@react-native-google-signin/google-signin"],
+    "plugins": [
+      "@react-native-google-signin/google-signin"
+    ],
     "android": {
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "package": "com.mmeguizo.midtermrequirements"
     },
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "77eda374-5f6c-48de-85c5-605f20a15ffe"
+      }
     }
   }
 }
