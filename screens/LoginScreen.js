@@ -108,12 +108,13 @@ export default function LoginScreen({ navigation }) {
         // firebaseUser.uid, .email, etc. are available
         console.log('Firebase auth success:', { firebaseUser });
         // signIn(firebaseUser.email); // update context with the email of the logged-in user
-        navigation.replace('Home');
         signIn({
           uid: firebaseUser.uid ?? 1,
           email: firebaseUser.email,
           name: firebaseUser.email.split('@')[0],
         });
+        //  navigation.replace('Home', {user firebase.email});
+          navigation.replace('Home');
       })
       .catch((err) => {
         console.log('Firebase auth error:', err.message);

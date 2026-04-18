@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "77629757222",
+    "firebase_url": "https://sti-attendance-c3653-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "sti-attendance-c3653",
+    "storage_bucket": "sti-attendance-c3653.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77629757222:android:340fa2c8523c669def93e7",
+        "android_client_info": {
+          "package_name": "com.mmeguizo.midtermrequirements"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "77629757222-q1sr4r45efiqt4ate8s5s0eqev8ptpvh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHEp4oU4bq5PYO_zRk9SSyV7UbyPZcOqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "77629757222-26g07e0goj5v5fcj0rrj8h71jbptoq9o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,6 +11,8 @@ export default function HomeScreen({ navigation, route }) {
   const { user } = useContext(AuthContext);
   const [userCount, setUserCount] = useState(null);
 
+console.log({ HomeScreen : user})
+    // console.log({stringify : JSON.parse(user)})
   useEffect(() => {
     const fetchCount = async () => {
       try {

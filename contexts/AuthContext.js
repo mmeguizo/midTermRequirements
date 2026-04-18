@@ -58,7 +58,10 @@ export function AuthProvider({ children }) {
 
   const signIn = async (userData) => {
     setUser(userData);
+
+  console.log(userData)
     await AsyncStorage.setItem('user', JSON.stringify(userData));
+  
   };
 
   const signOut = async () => {
